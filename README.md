@@ -1,58 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Boilerplate SaaS Laravel 13
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aquest és un boilerplate complet i modern per a la construcció d'aplicacions SaaS (Software as a Service) utilitzant **Laravel 13** i **PHP 8.3**. Està dissenyat per proporcionar una base sòlida, orientada a APIs, amb suport natiu per a multi-tenancy, pagaments via Stripe, autenticació i control de permisos.
 
-## About Laravel
+## 🚀 Característiques Principals
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* **Framework Modern:** Construït sobre Laravel 13 i PHP 8.3.
+* **Autenticació d'API:** Sistema segur d'inici de sessió i registre utilitzant [Laravel Sanctum](https://laravel.com/docs/sanctum).
+* **Multi-Tenancy:** Estructura preparada per a Espais de Treball/Organitzacions (Tenants). Un usuari pot tenir un tenant per defecte i canviar entre ells.
+* **Sistema d'Invitacions:** Funcionalitat nativa per convidar nous membres a un Tenant per correu electrònic (amb tokens d'acceptació).
+* **Subscripcions i Facturació (Billing):** Integració completa amb Stripe mitjançant [Laravel Cashier](https://laravel.com/docs/billing), incloent-hi suport per a webhooks, portal de facturació, compra de crèdits i canvi de plans. El `Tenant` és l'entitat pagadora (Billable).
+* **Rols i Permisos:** Gestió robusta d'accessos integrada amb el paquet [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission).
+* **Frontend Preparat:** Eines configurades amb **Vite** i **Tailwind CSS v4** per a actius dinàmics i ràpids.
+* **Scripts de Productivitat:** Comandes optimitzades al `composer.json` per executar l'entorn de desenvolupament de forma concurrent (Servidor PHP, Cues i Vite).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Tecnologies Utilitzades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* [Laravel 13](https://laravel.com)
+* [PHP 8.3+](https://www.php.net/)
+* [Laravel Cashier](https://laravel.com/docs/billing) (v16.5)
+* [Laravel Sanctum](https://laravel.com/docs/sanctum) (v4.0)
+* [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission) (v7.2)
+* [Tailwind CSS v4](https://tailwindcss.com/) & [Vite](https://vitejs.dev/)
+* Base de dades: SQLite (configuració per defecte) / MySQL / PostgreSQL.
 
-## Learning Laravel
+## ⚙️ Requisits Previs
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Assegureu-vos de tenir les següents dependències instal·lades al vostre entorn de desenvolupament:
+* PHP 8.3 o superior
+* Composer
+* Node.js (v18+) i NPM/Yarn/PNPM
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📦 Instal·lació i Configuració
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Gràcies als scripts personalitzats de Composer, la configuració inicial del projecte és molt senzilla.
 
-## Agentic Development
+1. **Clona el repositori:**
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+    git clone https://github.com/el-teu-usuari/boilerplate-sass-laravel-13.git
+    cd boilerplate-sass-laravel-13
 
-```bash
-composer require laravel/boost --dev
+2. **Executa l'script de configuració automàtica:**
+   Aquesta comanda instal·larà les dependències de PHP, crearà l'arxiu `.env`, generarà la clau de l'aplicació, executarà les migracions, instal·larà les dependències de Node i compilarà els actius.
 
-php artisan boost:install
-```
+    composer setup
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+3. **Configuració de l'Entorn (.env):**
+   Obriu l'arxiu `.env` creat recentment i ajusteu les configuracions necessàries. Presteu especial atenció a les claus de Stripe i a les configuracions del superadministrador:
 
-## Contributing
+    # Credencials de Stripe
+    STRIPE_KEY=pk_test_...
+    STRIPE_SECRET=sk_test_...
+    STRIPE_WEBHOOK_SECRET=whsec_...
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    # Configuració de la Facturació (Moneda)
+    CASHIER_CURRENCY=BRL
+    CASHIER_CURRENCY_LOCALE=pt_BR
 
-## Code of Conduct
+    # Configuracions Administratives
+    SUPER_ADMIN_EMAIL=superadmin@app.com
+    SYSTEM_ADMIN_EMAIL=admin@app.com
+    DEFAULT_TENANT_NAME="Acme Corp"
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🖥️ Execució de l'Aplicació
 
-## Security Vulnerabilities
+Per iniciar el servidor de desenvolupament, el processament de cues i Vite simultàniament, utilitzeu la comanda:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    composer dev
 
-## License
+Això iniciarà:
+* El servidor integrat de Laravel (`php artisan serve`)
+* El treballador de cues (`php artisan queue:listen`)
+* Laravel Pail per als registres (logs)
+* El servidor de desenvolupament de Vite (`npm run dev`)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🛣️ Estructura de Rutes (API)
+
+Les rutes de l'aplicació estan centrades a respondre via API (`routes/api.php`), protegides per Sanctum i pel middleware de context del Tenant.
+
+### Públiques
+* `POST /api/auth/register`: Registre de nous usuaris.
+* `POST /api/auth/login`: Autenticació.
+* `POST /api/invites/{token}/accept-new`: Acceptació d'invitació per a usuaris sense compte.
+* `POST /api/stripe/webhook`: Endpoint perquè Cashier processi els esdeveniments de Stripe.
+
+### Protegides (Requereixen Token)
+* **Auth:** Tancament de sessió i dades de l'usuari connectat (`/api/auth/me`).
+* **Tenant (`/api/tenant`):** * Llistar, crear, obtenir el tenant actual i establir el tenant per defecte.
+  * Canviar entre tenants (`/switch/{tenant}`).
+  * Gestió d'invitacions (`/invites`).
+* **Invites:** Acceptar invitacions amb un usuari ja connectat.
+* **Billing (`/api/billing`):**
+  * Estat de la subscripció i factures.
+  * Enllaç al Portal del Client de Stripe (`/portal`).
+  * Checkouts per a subscripcions (`/subscription/checkout`), compra única o crèdits.
+  * Cancel·lació, represa i canvi de plans.
+
+## 🤝 Contribució
+
+Sentiu-vos lliures d'enviar *Pull Requests* o obrir *Issues* per informar d'errors i suggerir noves funcionalitats per a aquest boilerplate.
+
+## 📄 Llicència
+
+Aquest boilerplate és programari de codi obert amb llicència [MIT](https://opensource.org/licenses/MIT).
