@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Billing\BillingController;
 use App\Http\Controllers\Api\StripeWebhookController;
 use App\Http\Controllers\Api\Tenant\TenantController;
 use App\Http\Controllers\Api\Tenant\TenantSwitchController;
@@ -35,6 +36,17 @@ Route::middleware(['auth:sanctum', 'tenant.set'])->group(function () {
         Route::post('/switch/{tenant}', [TenantSwitchController::class, '__invoke'])->name('switch');
     });
 
-    // Billing (virá a seguir)
-    // Route::prefix('billing')->name('billing.')->group(function () { ... });
+    // Billing
+    Route::prefix('billing')->name('billing.')->group(function () {
+        Route::get('/status',                        [BillingController::class, 'status'])->name('status');
+        Route::get('/portal',                        [BillingController::class, 'portal'])->name('portal');
+        Route::get('/invoices',                      [BillingController::class, 'invoices'])->name('invoices');
+        Route::get('/invoices/{invoice}/download',   [BillingController::class, 'downloadInvoice'])->name('invoices.download');
+        Route::post('/subscription/checkout',        [BillingController::class, 'subscriptionCheckout'])->name('subscription.checkout');
+        Route::post('/subscription/cancel',          [BillingController::class, 'cancelSubscription'])->name('subscription.cancel');
+        Route::post('/subscription/resume',          [BillingController::class, 'resumeSubscription'])->name('subscription.resume');
+        Route::post('/subscription/swap',            [BillingController::class, 'swapPlan'])->name('subscription.swap');
+        Route::post('/credits/checkout',             [BillingController::class, 'creditsCheckout'])->name('credits.checkout');
+        Route::post('/once/checkout',                [BillingController::class, 'onceCheckout'])->name('once.checkout');
+    });
 });
