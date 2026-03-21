@@ -2,15 +2,25 @@
 
 namespace App\Providers;
 
+use App\Models\Invite;
+use App\Models\Tenant;
+use App\Policies\BillingPolicy;
+use App\Policies\InvitePolicy;
+use App\Policies\TenantPolicy;
 use App\Services\AuthService;
 use App\Services\InviteService;
 use App\Services\TenantBillingService;
 use App\Services\TenantContextService;
 use App\Services\TenantService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        Tenant::class => TenantPolicy::class,
+        Invite::class => InvitePolicy::class,
+    ];
     /**
      * Register any application services.
      */
@@ -37,6 +47,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
+
+        // BillingPolicy não tem model próprio — registra manualmente
+        Gate::define('billing.view',   [BillingPolicy::class, 'view']);
+        Gate::define('billing.manage', [BillingPolicy::class, 'manage']);
+        Gate::define('billing.cancel', [BillingPolicy::class, 'cancel']);
+
+        // super-admin bypassa todo o Gate via Spatie
+        Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super-admin')) {
+                return true;
+            }
+        });
     }
 }
