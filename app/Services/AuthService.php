@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Auth;
+namespace App\Services;
 
 use App\Models\MemberProfile;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Services\Tenant\TenantContextService;
+use App\Services\TenantContextService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;

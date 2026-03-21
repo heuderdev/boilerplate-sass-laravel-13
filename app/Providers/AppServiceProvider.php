@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Services\Auth\AuthService;
-use App\Services\Tenant\TenantContextService;
+use App\Services\AuthService;
+use App\Services\TenantContextService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

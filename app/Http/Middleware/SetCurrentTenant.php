@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\Tenant\TenantContextService;
+use App\Services\TenantContextService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

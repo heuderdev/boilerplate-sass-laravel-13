@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Tenant;
+namespace App\Services;
 
 use App\Models\MemberProfile;
 use App\Models\Tenant;
