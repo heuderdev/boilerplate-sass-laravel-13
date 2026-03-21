@@ -15,7 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['funcionario', 'cliente', 'owner']);
+            $table->enum('type', [
+                'funcionario',    // quem trabalha dentro do tenant
+                'cliente',        // usuário que consome o serviço (paciente, cliente, aluno, etc.)
+                'fornecedor',     // empresas/pessoas que fornecem serviço/produto
+                'parceiro',       // parceiro comercial, integrador, canal
+                'owner',          // dono/admin do tenant (pode ser o mesmo que o admin)
+                'representante',  // representante de venda, vendedor externo
+                'autonomo',       // profissional autônomo ligado ao tenant
+            ]);
             $table->enum('status', ['ativo', 'inativo', 'pendente'])->default('ativo');
             $table->string('cargo')->nullable();  // ex: Gerente Financeiro
             $table->unique(['user_id', 'tenant_id', 'type']);
