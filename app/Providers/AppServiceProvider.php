@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\AuthService;
+use App\Services\TenantBillingService;
 use App\Services\TenantContextService;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(TenantContextService::class)
             );
         });
+
+        // TENANTBILLINGSERVICE NÃO TEM DEPENDÊNCIAS → AUTOWIRING DIRETO
+        $this->app->singleton(TenantBillingService::class);
     }
 
     /**
