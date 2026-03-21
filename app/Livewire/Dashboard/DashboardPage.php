@@ -3,7 +3,6 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\MemberProfile;
-use App\Services\AuthService;
 use App\Services\TenantContextService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;

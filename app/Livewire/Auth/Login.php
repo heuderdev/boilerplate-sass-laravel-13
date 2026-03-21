@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('layouts.auth')]
 class Login extends Component
 {
     public string $email    = '';
@@ -33,7 +34,7 @@ class Login extends Component
         }
     }
 
-    #[Layout('layouts::auth')]
+
     public function render()
     {
         return view('livewire.auth.login');

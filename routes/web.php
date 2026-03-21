@@ -13,7 +13,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
 });
 
-Route::get('/dashboard', DashboardPage::class)->name('dashboard');
+Route::middleware(['auth'])->get('/dashboard', DashboardPage::class)->name('dashboard');
 
 Route::get('/billing/success', fn() => view('billing.success'))->name('billing.success');
 Route::get('/billing/cancel',  fn() => view('billing.cancel'))->name('billing.cancel');
