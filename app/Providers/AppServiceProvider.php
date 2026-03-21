@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies();
+        // $this->registerPolicies();
 
         // BillingPolicy não tem model próprio — registra manualmente
         Gate::define('billing.view',   [BillingPolicy::class, 'view']);
