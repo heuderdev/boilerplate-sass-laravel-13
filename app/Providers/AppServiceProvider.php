@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\AuthService;
+use App\Services\InviteService;
 use App\Services\TenantBillingService;
 use App\Services\TenantContextService;
 use App\Services\TenantService;
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TenantBillingService::class);
 
         $this->app->singleton(TenantService::class);
+
+        $this->app->singleton(InviteService::class);
     }
 
     /**
