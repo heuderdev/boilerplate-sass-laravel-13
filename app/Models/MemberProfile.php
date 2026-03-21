@@ -29,7 +29,7 @@ class MemberProfile extends Model
 
     public function isAdmin(): bool
     {
-        return $this->type === 'admin';
+        return $this->type === 'owner';
     }
 
     public function isFuncionario(): bool

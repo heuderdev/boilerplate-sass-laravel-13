@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['funcionario', 'cliente', 'admin']);
+            $table->enum('type', ['funcionario', 'cliente', 'owner']);
             $table->enum('status', ['ativo', 'inativo', 'pendente'])->default('ativo');
             $table->string('cargo')->nullable();  // ex: Gerente Financeiro
             $table->unique(['user_id', 'tenant_id', 'type']);

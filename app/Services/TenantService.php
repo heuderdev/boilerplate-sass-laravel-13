@@ -34,6 +34,10 @@ class TenantService
 
         $user->setDefaultTenant($tenant);
 
+        if (!$user->hasRole('owner')) {
+            $user->assignRole('owner');
+        }
+
         return $tenant;
     }
 

@@ -72,13 +72,16 @@ class AuthService
         MemberProfile::create([
             'user_id'   => $user->id,
             'tenant_id' => $tenant->id,
-            'type'      => 'admin',
+            'type'      => 'owner',
             'status'    => 'ativo',
+            'cargo' => 'SEO'
         ]);
 
         // 4. Define tenant como default do usuário
         $user->update(['default_tenant_id' => $tenant->id]);
         $user->refresh();
+
+        $user->assignRole('owner');
 
         // 5. Loga e seta contexto
         Auth::login($user);
