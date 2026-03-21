@@ -123,6 +123,8 @@ class AuthService
             ]);
         }
 
+        $user->setDefaultTenant($tenant);
+
         // Revoga token anterior e gera novo vinculado ao tenant
         $user->currentAccessToken()?->delete();
         $token = $user->createToken("tenant_{$tenant->id}")->plainTextToken;
