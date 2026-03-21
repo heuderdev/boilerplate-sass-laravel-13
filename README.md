@@ -1,19 +1,19 @@
 # Boilerplate SaaS Laravel 13
 
-Aquest és un boilerplate complet i modern per a la construcció d'aplicacions SaaS (Software as a Service) utilitzant **Laravel 13** i **PHP 8.3**. Està dissenyat per proporcionar una base sòlida, orientada a APIs, amb suport natiu per a multi-tenancy, pagaments via Stripe, autenticació i control de permisos.
+Este é um *boilerplate* completo e moderno para a construção de aplicações SaaS (*Software as a Service*) utilizando o **Laravel 13** e o **PHP 8.3**. Foi concebido para fornecer uma base sólida, orientada a APIs, com suporte nativo para *multi-tenancy*, pagamentos via Stripe, autenticação e controlo de permissões.
 
-## 🚀 Característiques Principals
+## 🚀 Principais Funcionalidades
 
-* **Framework Modern:** Construït sobre Laravel 13 i PHP 8.3.
-* **Autenticació d'API:** Sistema segur d'inici de sessió i registre utilitzant [Laravel Sanctum](https://laravel.com/docs/sanctum).
-* **Multi-Tenancy:** Estructura preparada per a Espais de Treball/Organitzacions (Tenants). Un usuari pot tenir un tenant per defecte i canviar entre ells.
-* **Sistema d'Invitacions:** Funcionalitat nativa per convidar nous membres a un Tenant per correu electrònic (amb tokens d'acceptació).
-* **Subscripcions i Facturació (Billing):** Integració completa amb Stripe mitjançant [Laravel Cashier](https://laravel.com/docs/billing), incloent-hi suport per a webhooks, portal de facturació, compra de crèdits i canvi de plans. El `Tenant` és l'entitat pagadora (Billable).
-* **Rols i Permisos:** Gestió robusta d'accessos integrada amb el paquet [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission).
-* **Frontend Preparat:** Eines configurades amb **Vite** i **Tailwind CSS v4** per a actius dinàmics i ràpids.
-* **Scripts de Productivitat:** Comandes optimitzades al `composer.json` per executar l'entorn de desenvolupament de forma concurrent (Servidor PHP, Cues i Vite).
+* **Framework Moderno:** Construído sobre o Laravel 13 e o PHP 8.3.
+* **Autenticação de API:** Sistema seguro de início de sessão e registo utilizando o Laravel Sanctum 4.0.
+* **Multi-Tenancy:** Estrutura preparada para Workspaces/Organizações (*Tenants*). Um utilizador pode ter um *tenant* predefinido e alternar entre eles.
+* **Sistema de Convites:** Funcionalidade nativa para convidar novos membros para um *Tenant* por e-mail, incluindo gestão de tokens e expiração.
+* **Assinaturas e Faturação (Billing):** Integração completa com o Stripe através do Laravel Cashier 16.5, com suporte para *webhooks*, portal de faturação e diversos fluxos de checkout.
+* **Funções e Permissões:** Gestão robusta de acessos via Spatie Laravel Permission 7.2.
+* **Frontend Preparado:** Configurado com Vite 7.0 e Tailwind CSS v4 para um desenvolvimento ágil.
+* **Scripts de Produtividade:** Comandos customizados no `composer.json` para facilitar o *setup* e a execução concorrente do ambiente de desenvolvimento.
 
-## 🛠️ Tecnologies Utilitzades
+## 🛠️ Tecnologias Utilizadas
 
 * [Laravel 13](https://laravel.com)
 * [PHP 8.3+](https://www.php.net/)
@@ -21,84 +21,68 @@ Aquest és un boilerplate complet i modern per a la construcció d'aplicacions S
 * [Laravel Sanctum](https://laravel.com/docs/sanctum) (v4.0)
 * [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission) (v7.2)
 * [Tailwind CSS v4](https://tailwindcss.com/) & [Vite](https://vitejs.dev/)
-* Base de dades: SQLite (configuració per defecte) / MySQL / PostgreSQL.
+* Base de dados: SQLite (predefinido), com suporte para MySQL/PostgreSQL.
 
-## ⚙️ Requisits Previs
+## ⚙️ Pré-requisitos
 
-Assegureu-vos de tenir les següents dependències instal·lades al vostre entorn de desenvolupament:
-* PHP 8.3 o superior
+Certifique-se de ter as seguintes dependências instaladas:
+* PHP 8.3 ou superior
 * Composer
-* Node.js (v18+) i NPM/Yarn/PNPM
+* Node.js (v18+) e NPM
 
-## 📦 Instal·lació i Configuració
+## 📦 Instalação e Configuração
 
-Gràcies als scripts personalitzats de Composer, la configuració inicial del projecte és molt senzilla.
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/heuderdev/boilerplate-sass-laravel-13.git](https://github.com/heuderdev/boilerplate-sass-laravel-13.git)
+   cd boilerplate-sass-laravel-13
+Execute o script de configuração automática:
+Este comando instala dependências, configura o .env, gera chaves e executa migrações.
 
-1. **Clona el repositori:**
+Bash
+composer setup
+Configuração do Ambiente (.env):
+Ajuste as chaves do Stripe e as credenciais de administrador no seu ficheiro .env:
 
-    git clone https://github.com/el-teu-usuari/boilerplate-sass-laravel-13.git
-    cd boilerplate-sass-laravel-13
+Snippet de código
+STRIPE_KEY=pk_test_...
+STRIPE_SECRET=sk_test_...
+CASHIER_CURRENCY=BRL
+CASHIER_CURRENCY_LOCALE=pt_BR
 
-2. **Executa l'script de configuració automàtica:**
-   Aquesta comanda instal·larà les dependències de PHP, crearà l'arxiu `.env`, generarà la clau de l'aplicació, executarà les migracions, instal·larà les dependències de Node i compilarà els actius.
+SUPER_ADMIN_EMAIL=superadmin@app.com
+DEFAULT_TENANT_NAME="Acme Corp"
+🖥️ Execução da Aplicação
+Para iniciar o servidor, as filas e o Vite simultaneamente:
 
-    composer setup
+Bash
+composer dev
+Isto executará:
 
-3. **Configuració de l'Entorn (.env):**
-   Obriu l'arxiu `.env` creat recentment i ajusteu les configuracions necessàries. Presteu especial atenció a les claus de Stripe i a les configuracions del superadministrador:
+php artisan serve (Servidor)
 
-    # Credencials de Stripe
-    STRIPE_KEY=pk_test_...
-    STRIPE_SECRET=sk_test_...
-    STRIPE_WEBHOOK_SECRET=whsec_...
+php artisan queue:listen (Filas)
 
-    # Configuració de la Facturació (Moneda)
-    CASHIER_CURRENCY=BRL
-    CASHIER_CURRENCY_LOCALE=pt_BR
+php artisan pail (Logs em tempo real)
 
-    # Configuracions Administratives
-    SUPER_ADMIN_EMAIL=superadmin@app.com
-    SYSTEM_ADMIN_EMAIL=admin@app.com
-    DEFAULT_TENANT_NAME="Acme Corp"
+npm run dev (Vite)
 
-## 🖥️ Execució de l'Aplicació
+🛣️ Estrutura de Rotas (API)
+As rotas estão organizadas em routes/api.php:
 
-Per iniciar el servidor de desenvolupament, el processament de cues i Vite simultàniament, utilitzeu la comanda:
+Públicas
+POST /api/auth/register: Registo de utilizadores.
 
-    composer dev
+POST /api/auth/login: Autenticação.
 
-Això iniciarà:
-* El servidor integrat de Laravel (`php artisan serve`)
-* El treballador de cues (`php artisan queue:listen`)
-* Laravel Pail per als registres (logs)
-* El servidor de desenvolupament de Vite (`npm run dev`)
+POST /api/stripe/webhook: Receção de eventos do Stripe.
 
-## 🛣️ Estructura de Rutes (API)
+Protegidas (Auth & Tenant Context)
+Auth: /api/auth/me e /api/auth/logout.
 
-Les rutes de l'aplicació estan centrades a respondre via API (`routes/api.php`), protegides per Sanctum i pel middleware de context del Tenant.
+Tenant: Gestão de workspaces, troca de contexto e convites.
 
-### Públiques
-* `POST /api/auth/register`: Registre de nous usuaris.
-* `POST /api/auth/login`: Autenticació.
-* `POST /api/invites/{token}/accept-new`: Acceptació d'invitació per a usuaris sense compte.
-* `POST /api/stripe/webhook`: Endpoint perquè Cashier processi els esdeveniments de Stripe.
+Billing: Status de subscrição, faturas, portal Stripe e fluxos de checkout.
 
-### Protegides (Requereixen Token)
-* **Auth:** Tancament de sessió i dades de l'usuari connectat (`/api/auth/me`).
-* **Tenant (`/api/tenant`):** * Llistar, crear, obtenir el tenant actual i establir el tenant per defecte.
-  * Canviar entre tenants (`/switch/{tenant}`).
-  * Gestió d'invitacions (`/invites`).
-* **Invites:** Acceptar invitacions amb un usuari ja connectat.
-* **Billing (`/api/billing`):**
-  * Estat de la subscripció i factures.
-  * Enllaç al Portal del Client de Stripe (`/portal`).
-  * Checkouts per a subscripcions (`/subscription/checkout`), compra única o crèdits.
-  * Cancel·lació, represa i canvi de plans.
-
-## 🤝 Contribució
-
-Sentiu-vos lliures d'enviar *Pull Requests* o obrir *Issues* per informar d'errors i suggerir noves funcionalitats per a aquest boilerplate.
-
-## 📄 Llicència
-
-Aquest boilerplate és programari de codi obert amb llicència [MIT](https://opensource.org/licenses/MIT).
+📄 Licença
+Este projeto é um software de código aberto sob a licença MIT.
