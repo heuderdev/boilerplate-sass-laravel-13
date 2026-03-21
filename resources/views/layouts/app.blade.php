@@ -14,13 +14,13 @@
     <nav class="bg-white shadow px-6 py-4 flex items-center justify-between">
         <span class="font-bold text-lg">{{ config('app.name') }}</span>
         <div class="flex gap-4 text-sm">
-            <a href="{{ route('dashboard') }}" wire:navigate>Dashboard</a>
+            {{-- <a href="{{ route('dashboard') }}" wire:navigate>Dashboard</a>
             <a href="{{ route('tenant.index') }}" wire:navigate>Tenants</a>
-            <a href="{{ route('billing.index') }}" wire:navigate>Billing</a>
-            <form method="POST" action="{{ route('logout') }}">
+            <a href="{{ route('billing.index') }}" wire:navigate>Billing</a> --}}
+            {{-- <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="text-red-500">Sair</button>
-            </form>
+            </form> --}}
         </div>
     </nav>
 

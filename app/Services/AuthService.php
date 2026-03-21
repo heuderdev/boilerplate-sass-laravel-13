@@ -156,4 +156,25 @@ class AuthService
         session()->invalidate();
         session()->regenerateToken();
     }
+
+    // WEB
+    // Adicionar em app/Services/AuthService.php
+
+    public function loginWeb(string $email, string $password): void
+    {
+        if (! Auth::attempt(['email' => $email, 'password' => $password])) {
+            throw ValidationException::withMessages([
+                'email' => 'Credenciais inválidas.',
+            ]);
+        }
+
+        request()->session()->regenerate();
+    }
+
+    public function logoutWeb(): void
+    {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+    }
 }
