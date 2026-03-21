@@ -60,10 +60,12 @@ class AuthService
             'password' => Hash::make($data['password']),
         ]);
 
+        $tenantName = $this->generateUniqueTenantName($data['name']);
+
         // 2. Cria o tenant da empresa
         $tenant = Tenant::create([
-            'name' => $data['company'],
-            'slug' => Str::slug($data['company']),
+            'name' => $tenantName,
+            'slug' => Str::slug($tenantName),
         ]);
 
         // 3. Cria MemberProfile como admin do tenant
@@ -90,6 +92,20 @@ class AuthService
             'tenant' => $tenant,
             'token'  => $token,
         ];
+    }
+
+    private function generateUniqueTenantName(string $userName): string
+    {
+        $base  = Str::slug($userName);
+        $name  = $base;
+        $count = 2;
+
+        while (Tenant::where('slug', Str::slug($name))->exists()) {
+            $name = "{$base}-{$count}";
+            $count++;
+        }
+
+        return $name;
     }
 
     // -------------------------------------------------------
