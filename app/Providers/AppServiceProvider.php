@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Auth\AuthService;
 use App\Services\Tenant\TenantContextService;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,6 +14,12 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(TenantContextService::class);
+
+        $this->app->singleton(AuthService::class, function ($app) {
+            return new AuthService(
+                $app->make(TenantContextService::class)
+            );
+        });
     }
 
     /**
