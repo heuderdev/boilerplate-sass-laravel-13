@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\CreateTenantRequest;
 use App\Services\AuthService;
 use App\Services\TenantContextService;
 use App\Services\TenantService;
@@ -38,17 +39,9 @@ class TenantController extends Controller
     }
 
     // POST /api/tenant — Cria novo tenant
-    public function store(Request $request): JsonResponse
+    public function store(CreateTenantRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        $tenant = $this->tenantService->create(
-            $request->user(),
-            $validated['name']
-        );
-
+        $tenant = $this->tenantService->create($request->user(), $request->name);
         $result = $this->authService->switchTenant($tenant);
 
         return response()->json([

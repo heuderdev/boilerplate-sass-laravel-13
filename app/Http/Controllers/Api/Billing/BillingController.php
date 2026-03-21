@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api\Billing;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Billing\CreditsCheckoutRequest;
+use App\Http\Requests\Billing\OnceCheckoutRequest;
+use App\Http\Requests\Billing\SubscriptionCheckoutRequest;
+use App\Http\Requests\Billing\SwapPlanRequest;
 use App\Services\TenantBillingService;
 use App\Services\TenantContextService;
 use Illuminate\Http\JsonResponse;
@@ -30,16 +34,12 @@ class BillingController extends Controller
     }
 
     // POST /api/billing/subscription/checkout
-    public function subscriptionCheckout(Request $request): JsonResponse
+    public function subscriptionCheckout(SubscriptionCheckoutRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'price_id' => 'required|string',
-        ]);
-
         $tenant   = $this->tenantContext->currentTenant();
         $checkout = $this->billing->checkoutSubscription(
             $tenant,
-            $validated['price_id'],
+            $request->price_id,
             route('billing.success'),
             route('billing.cancel')
         );
@@ -74,14 +74,10 @@ class BillingController extends Controller
     }
 
     // POST /api/billing/subscription/swap
-    public function swapPlan(Request $request): JsonResponse
+    public function swapPlan(SwapPlanRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'price_id' => 'required|string',
-        ]);
-
         $tenant       = $this->tenantContext->currentTenant();
-        $subscription = $this->billing->swapPlan($tenant, $validated['price_id']);
+        $subscription = $this->billing->swapPlan($tenant, $request->price_id);
 
         return response()->json([
             'message'      => 'Plano alterado com sucesso.',
@@ -90,16 +86,12 @@ class BillingController extends Controller
     }
 
     // POST /api/billing/credits/checkout
-    public function creditsCheckout(Request $request): JsonResponse
+    public function creditsCheckout(CreditsCheckoutRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'amount' => 'required|integer|min:500', // mínimo R$5,00 em centavos
-        ]);
-
         $tenant   = $this->tenantContext->currentTenant();
         $checkout = $this->billing->checkoutCredits(
             $tenant,
-            $validated['amount'],
+            $request->amount,
             route('billing.success'),
             route('billing.cancel')
         );
@@ -108,21 +100,17 @@ class BillingController extends Controller
     }
 
     // POST /api/billing/once/checkout
-    public function onceCheckout(Request $request): JsonResponse
+    public function onceCheckout(OnceCheckoutRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'price_id' => 'required|string',
-            'quantity' => 'integer|min:1',
-        ]);
-
         $tenant   = $this->tenantContext->currentTenant();
         $checkout = $this->billing->checkoutOnce(
             $tenant,
-            $validated['price_id'],
-            $validated['quantity'] ?? 1,
+            $request->price_id,
+            $request->integer('quantity', 1),
             route('billing.success'),
             route('billing.cancel')
         );
+
 
         return response()->json(['url' => $checkout->url]);
     }

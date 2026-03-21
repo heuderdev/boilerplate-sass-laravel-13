@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,15 +17,9 @@ class AuthController extends Controller
     ) {}
 
     // POST /api/auth/register
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
-        ]);
-
-        $result = $this->authService->register($validated);
+        $result = $this->authService->register($request->validated());
 
         return response()->json([
             'message' => 'Cadastro realizado com sucesso.',
@@ -34,18 +30,12 @@ class AuthController extends Controller
     }
 
     // POST /api/auth/login
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|string',
-            'remember' => 'boolean',
-        ]);
-
         $result = $this->authService->login(
-            email: $validated['email'],
-            password: $validated['password'],
-            remember: $validated['remember'] ?? false,
+            email: $request->email,
+            password: $request->password,
+            remember: $request->boolean('remember'),
         );
 
         return response()->json([

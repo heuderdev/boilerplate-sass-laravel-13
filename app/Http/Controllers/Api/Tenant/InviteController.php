@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tenant\SendInviteRequest;
 use App\Models\Invite;
 use App\Services\InviteService;
 use App\Services\TenantContextService;
@@ -27,20 +28,14 @@ class InviteController extends Controller
     }
 
     // POST /api/tenant/invites
-    public function store(Request $request): JsonResponse
+    public function store(SendInviteRequest  $request): JsonResponse
     {
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'role'  => 'required|string|in:owner,admin,manager,member,contributor,viewer,guest',
-            'type'  => 'required|string|in:owner,admin,manager,member,contributor,viewer,guest',
-        ]);
-
         $invite = $this->inviteService->send(
             $this->tenantContext->currentTenant(),
             $request->user(),
-            $validated['email'],
-            $validated['role'],
-            $validated['type'],
+            $request->email,
+            $request->role,
+            $request->type,
         );
 
         return response()->json([
