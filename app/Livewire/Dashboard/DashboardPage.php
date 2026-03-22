@@ -9,9 +9,13 @@ use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+use SweetAlert2\Laravel\Traits\WithSweetAlert;
+
 #[Layout('layouts.app')]
 class DashboardPage extends Component
 {
+    use WithSweetAlert;
+
     public string $tenantName      = '';
     public string $tenantSlug      = '';
     public bool   $isSubscribed    = false;
@@ -20,8 +24,23 @@ class DashboardPage extends Component
     public string $memberRole      = '';
     public string $memberStatus    = '';
 
+    public function save(): void {}
+
+
+    public function p()
+    {
+        $this->dispatch('p');
+    }
+
+
+    public function d()
+    {
+        $this->dispatch('d');
+    }
+
     public function mount(TenantContextService $tenantContext): void
     {
+        $this->save();
         $user   = Auth::user();
         $tenant = $tenantContext->currentTenant();
 

@@ -19,6 +19,8 @@ class BillingController extends Controller
         protected TenantContextService $tenantContext
     ) {}
 
+
+
     // GET /api/billing/status
     public function status(): JsonResponse
     {

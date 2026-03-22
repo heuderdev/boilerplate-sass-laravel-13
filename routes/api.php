@@ -27,7 +27,9 @@ Route::post('/invites/{token}/accept-new', [InviteController::class, 'acceptAsNe
     ->name('invites.accept-new');
 
 // -------------------------------------------------------
-// Protegidas
+// Protegidas — exigem autenticação + tenant resolvido
+// AQUI ficam as rotas que devem funcionar mesmo com
+// assinatura inativa
 // -------------------------------------------------------
 Route::middleware(['auth:sanctum', 'tenant.set'])->group(function () {
 
@@ -39,33 +41,46 @@ Route::middleware(['auth:sanctum', 'tenant.set'])->group(function () {
 
     // Tenant
     Route::prefix('tenant')->name('tenant.')->group(function () {
-        Route::get('/',                      [TenantController::class, 'index'])->name('index');
-        Route::get('/current',               [TenantController::class, 'current'])->name('current');
-        Route::post('/',                     [TenantController::class, 'store'])->name('store');
-        Route::post('/switch/{tenant}',      [TenantSwitchController::class, '__invoke'])->name('switch');
-        Route::patch('/{tenant}/default',    [TenantController::class, 'setDefault'])->name('set-default');
+        Route::get('/',                   [TenantController::class, 'index'])->name('index');
+        Route::get('/current',            [TenantController::class, 'current'])->name('current');
+        Route::post('/',                  [TenantController::class, 'store'])->name('store');
+        Route::post('/switch/{tenant}',   [TenantSwitchController::class, '__invoke'])->name('switch');
+        Route::patch('/{tenant}/default', [TenantController::class, 'setDefault'])->name('set-default');
 
-        // Invites — dentro do contexto de tenant
-        Route::get('/invites',               [InviteController::class, 'index'])->name('invites.index');
-        Route::post('/invites',              [InviteController::class, 'store'])->name('invites.store');
-        Route::delete('/invites/{invite}',   [InviteController::class, 'destroy'])->name('invites.destroy');
+        Route::get('/invites',             [InviteController::class, 'index'])->name('invites.index');
+        Route::post('/invites',            [InviteController::class, 'store'])->name('invites.store');
+        Route::delete('/invites/{invite}', [InviteController::class, 'destroy'])->name('invites.destroy');
     });
 
     // Aceitar convite — usuário já logado
     Route::post('/invites/{token}/accept', [InviteController::class, 'accept'])
         ->name('invites.accept');
 
-    // Billing
+    // Billing liberado mesmo com assinatura inativa
     Route::prefix('billing')->name('billing.')->group(function () {
-        Route::get('/status',                      [BillingController::class, 'status'])->name('status');
-        Route::get('/portal',                      [BillingController::class, 'portal'])->name('portal');
-        Route::get('/invoices',                    [BillingController::class, 'invoices'])->name('invoices');
+        Route::get('/status',                 [BillingController::class, 'status'])->name('status');
+        Route::get('/portal',                 [BillingController::class, 'portal'])->name('portal');
+        Route::get('/invoices',               [BillingController::class, 'invoices'])->name('invoices');
         Route::get('/invoices/{invoice}/download', [BillingController::class, 'downloadInvoice'])->name('invoices.download');
-        Route::post('/subscription/checkout',      [BillingController::class, 'subscriptionCheckout'])->name('subscription.checkout');
-        Route::post('/subscription/cancel',        [BillingController::class, 'cancelSubscription'])->name('subscription.cancel');
-        Route::post('/subscription/resume',        [BillingController::class, 'resumeSubscription'])->name('subscription.resume');
-        Route::post('/subscription/swap',          [BillingController::class, 'swapPlan'])->name('subscription.swap');
-        Route::post('/credits/checkout',           [BillingController::class, 'creditsCheckout'])->name('credits.checkout');
-        Route::post('/once/checkout',              [BillingController::class, 'onceCheckout'])->name('once.checkout');
+
+        Route::post('/subscription/checkout', [BillingController::class, 'subscriptionCheckout'])->name('subscription.checkout');
+        Route::post('/subscription/resume',   [BillingController::class, 'resumeSubscription'])->name('subscription.resume');
+        Route::post('/subscription/swap',     [BillingController::class, 'swapPlan'])->name('subscription.swap');
+
+        Route::post('/credits/checkout',      [BillingController::class, 'creditsCheckout'])->name('credits.checkout');
+        Route::post('/once/checkout',         [BillingController::class, 'onceCheckout'])->name('once.checkout');
     });
+});
+
+// -------------------------------------------------------
+// Protegidas — exigem autenticação + tenant resolvido +
+// assinatura ativa
+// -------------------------------------------------------
+Route::middleware(['auth:sanctum', 'tenant.set', 'tenant.active'])->group(function () {
+
+    Route::prefix('billing')->name('billing.')->group(function () {
+        Route::post('/subscription/cancel', [BillingController::class, 'cancelSubscription'])->name('subscription.cancel');
+    });
+
+    // Demais rotas do sistema que exigem assinatura ativa
 });

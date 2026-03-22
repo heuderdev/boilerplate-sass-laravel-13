@@ -5,10 +5,9 @@ namespace App\Http\Middleware;
 use App\Services\TenantContextService;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class SetCurrentTenant
+class EnsureTenantSubscriptionIsActive
 {
     public function __construct(
         protected TenantContextService $tenantContext
@@ -16,27 +15,21 @@ class SetCurrentTenant
 
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return $next($request);
-        }
-
-        $tenant = $this->tenantContext->currentTenant();
-
-        if (!$tenant) {
-            return $this->tenantNotFound($request);
+        if (!$this->tenantContext->isCurrentTenantActive()) {
+            return $this->tenantInactive($request);
         }
 
         return $next($request);
     }
 
-    private function tenantNotFound(Request $request): Response
+    private function tenantInactive(Request $request): Response
     {
         if ($request->expectsJson()) {
             return response()->json([
-                'message' => 'Nenhum tenant encontrado para este usuário.',
-            ], 400);
+                'message' => 'Assinatura inativa. Renove seu plano.',
+            ], 403);
         }
 
-        return redirect()->route('tenant.select');
+        return redirect()->route('billing.inactive');
     }
 }

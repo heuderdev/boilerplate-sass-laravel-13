@@ -55,7 +55,7 @@ class TenantService
         MemberProfile::create([
             'user_id'   => $user->id,
             'tenant_id' => $tenant->id,
-            'type'      => 'admin',
+            'type'      => 'owner',
             'status'    => 'ativo',
         ]);
     }

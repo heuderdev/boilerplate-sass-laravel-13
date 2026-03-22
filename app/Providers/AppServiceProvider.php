@@ -15,6 +15,8 @@ use App\Services\TenantService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
+use Laravel\Cashier\Cashier;
+
 class AppServiceProvider extends ServiceProvider
 {
     protected $policies = [
@@ -47,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Cashier::useCustomerModel(Tenant::class);
         // $this->registerPolicies();
 
         // BillingPolicy não tem model próprio — registra manualmente

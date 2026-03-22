@@ -15,6 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'tenant.set' => SetCurrentTenant::class,
+            'tenant.active' => \App\Http\Middleware\EnsureTenantSubscriptionIsActive::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'api/stripe/webhook',
+            // ou 'api/stripe/*' se quiser liberar todas sob esse prefixo
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

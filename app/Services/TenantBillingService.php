@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Tenant;
+use App\Models\Log as LogModel;
 use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Checkout;
 
@@ -20,6 +21,16 @@ class TenantBillingService
     ): Checkout {
         $tenant->createOrGetStripeCustomer();
 
+        // throw new \RuntimeException('ENTREI NO checkoutSubscription atual');
+
+        LogModel::query()->create([
+            'string_logs' => json_encode([
+                'price_id' => $priceId,
+                'starts_with_price' => str_starts_with($priceId, 'price_'),
+                'tenant_id' => $tenant->id,
+            ])
+        ]);
+
         return $tenant->newSubscription('default', $priceId)
             ->checkout([
                 'success_url' => $successUrl,
@@ -30,6 +41,17 @@ class TenantBillingService
                 ],
             ]);
     }
+
+    public function isCanceled(Tenant $tenant): bool
+{
+    $subscription = $tenant->subscription('default');
+
+    if (! $subscription) {
+        return false;
+    }
+
+    return $subscription->canceled();
+}
 
     // -------------------------------------------------------
     // ONE-TIME CHARGE — Compra Avulsa via Stripe Checkout

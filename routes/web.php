@@ -4,6 +4,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard\DashboardPage;
+use App\Livewire\Tenant\Pages\TenantIndexPage;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page.index');
@@ -17,3 +18,5 @@ Route::middleware(['auth'])->get('/dashboard', DashboardPage::class)->name('dash
 
 Route::get('/billing/success', fn() => view('billing.success'))->name('billing.success');
 Route::get('/billing/cancel',  fn() => view('billing.cancel'))->name('billing.cancel');
+
+Route::get('/tenant', TenantIndexPage::class)->name('tenant-index-page');
