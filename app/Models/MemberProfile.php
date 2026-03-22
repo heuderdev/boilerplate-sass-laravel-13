@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\TenantScope;
+use App\Services\TenantContextService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -11,6 +13,13 @@ class MemberProfile extends Model
     protected $casts = [
         'status' => 'string',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(
+            new TenantScope(app(TenantContextService::class))
+        );
+    }
 
     public function user(): BelongsTo
     {

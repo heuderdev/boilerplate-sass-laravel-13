@@ -21,7 +21,7 @@
 
     --radius-xl2: 1rem;
 
-    --breakpoint-xxs: 320px;
+    /* --breakpoint-xxs: 320px;
     --breakpoint-xs: 375px;
     --breakpoint-sm: 480px;
     --breakpoint-md: 640px;
@@ -32,5 +32,5 @@
     --breakpoint-desktop: 1440px;
     --breakpoint-fhd: 1920px;
     --breakpoint-qhd: 2560px;
-    --breakpoint-uhd: 3840px;
+    --breakpoint-uhd: 3840px; */
 }
